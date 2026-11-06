@@ -35,9 +35,9 @@ void limits_init()
   LIMIT_DDR &= ~(LIMIT_MASK); // Set as input pins
 
   #ifdef DISABLE_LIMIT_PIN_PULL_UP
-    LIMIT_PORT &= ~(LIMIT_MASK); // Normal low operation. Requires external pull-down.
+    lpc_gpio_pinmode(&LIMIT_PIN, LIMIT_MASK, LPC_PIN_NONE);   // Normal low operation. Requires external pull-down.
   #else
-    LIMIT_PORT |= (LIMIT_MASK);  // Enable internal pull-up resistors. Normal high operation.
+    lpc_gpio_pinmode(&LIMIT_PIN, LIMIT_MASK, LPC_PIN_PULLUP); // Enable internal pull-up resistors. Normal high operation.
   #endif
 
   if (bit_istrue(settings.flags,BITFLAG_HARD_LIMIT_ENABLE)) {

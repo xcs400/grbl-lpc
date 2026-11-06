@@ -26,6 +26,34 @@
 #ifndef cpu_map_h
 #define cpu_map_h
 
+// ---------------------------------------------------------------------------
+// LPC17xx input pin mode helper (pull-up / none / pull-down).
+// NOTE: writing to FIOPIN does NOT enable a pull-up on LPC17xx, the resistor mode
+// is selected with the PINMODEx registers (2 bits per pin: 00 pull-up, 10 none, 11 pull-down).
+// The GPIO port number is deduced from the FIOPIN address, so it can be called with the
+// existing XXX_PIN macros, e.g. lpc_gpio_pinmode(&LIMIT_PIN, LIMIT_MASK, LPC_PIN_PULLUP).
+// ---------------------------------------------------------------------------
+#define LPC_PIN_PULLUP    0u
+#define LPC_PIN_NONE      2u
+#define LPC_PIN_PULLDOWN  3u
+
+static inline void lpc_gpio_pinmode(volatile uint32_t *fiopin, uint32_t mask, uint32_t mode)
+{
+  const uintptr_t port0 = (uintptr_t)&LPC_GPIO0->FIOPIN;
+  const uintptr_t port1 = (uintptr_t)&LPC_GPIO1->FIOPIN;
+  uint32_t port = (uint32_t)(((uintptr_t)fiopin - port0) / (port1 - port0));
+  volatile uint32_t *pinmode = &LPC_PINCON->PINMODE0 + (port * 2u); // 2 registers per port
+  for (uint32_t bit = 0; bit < 32u; bit++) {
+    if (mask & (1u << bit)) {
+      volatile uint32_t *reg = pinmode + (bit >> 4);
+      uint32_t shift = (bit & 15u) * 2u;
+      *reg = (*reg & ~(3u << shift)) | (mode << shift);
+    }
+  }
+}
+// Overload for unused pins (CPU maps that define XXX_PIN as NotUsed): nothing to do.
+static inline void lpc_gpio_pinmode(DummyReg *, uint32_t, uint32_t) {}
+
 
 #ifdef CPU_MAP_ATMEGA328P // (Arduino Uno) Officially supported by Grbl.
 
@@ -221,13 +249,14 @@
   #define CONTROL_PIN       LPC_GPIO1->FIOPIN
   #define CONTROL_PORT      LPC_GPIO1->FIOPIN
   #define CONTROL_RESET_BIT         NotUsed  // Not needed as there is a special RESET pin on the Smoothiebaord
+  #define CONTROL_RESET_NOT_USED  // No reset input pin: excluded from CONTROL_MASK (1<<NotUsed would be bit 0 = P1.0!)
   #define CONTROL_FEED_HOLD_BIT     22  // P1.22
   #define CONTROL_CYCLE_START_BIT   23  // P1.23
   #define CONTROL_SAFETY_DOOR_BIT   22  // P1.22 NOTE: Safety door is shared with feed hold. Enabled by config define.
   #define CONTROL_INT       PCIE1  // Pin change interrupt enable pin
   #define CONTROL_INT_vect  PCINT1_vect
   #define CONTROL_PCMSK     NotUsed // Pin change interrupt register
-  #define CONTROL_MASK      ((1<<CONTROL_RESET_BIT)|(1<<CONTROL_FEED_HOLD_BIT)|(1<<CONTROL_CYCLE_START_BIT)|(1<<CONTROL_SAFETY_DOOR_BIT))
+  #define CONTROL_MASK      ((1<<CONTROL_FEED_HOLD_BIT)|(1<<CONTROL_CYCLE_START_BIT)|(1<<CONTROL_SAFETY_DOOR_BIT))
   #define CONTROL_INVERT_MASK   CONTROL_MASK // May be re-defined to only invert certain control pins.
 
   // Define probe switch input pin.
@@ -560,13 +589,14 @@
   #define CONTROL_PIN       LPC_GPIO1->FIOPIN
   #define CONTROL_PORT      LPC_GPIO1->FIOPIN
   #define CONTROL_RESET_BIT         NotUsed  // Not needed as there is a special RESET pin on the Smoothiebaord
+  #define CONTROL_RESET_NOT_USED  // No reset input pin: excluded from CONTROL_MASK (1<<NotUsed would be bit 0 = P1.0!)
   #define CONTROL_FEED_HOLD_BIT     22  // P1.22
   #define CONTROL_CYCLE_START_BIT   23  // P1.23
   #define CONTROL_SAFETY_DOOR_BIT   22  // P1.22 NOTE: Safety door is shared with feed hold. Enabled by config define.
   #define CONTROL_INT       PCIE1  // Pin change interrupt enable pin
   #define CONTROL_INT_vect  PCINT1_vect
   #define CONTROL_PCMSK     NotUsed // Pin change interrupt register
-  #define CONTROL_MASK      ((1<<CONTROL_RESET_BIT)|(1<<CONTROL_FEED_HOLD_BIT)|(1<<CONTROL_CYCLE_START_BIT)|(1<<CONTROL_SAFETY_DOOR_BIT))
+  #define CONTROL_MASK      ((1<<CONTROL_FEED_HOLD_BIT)|(1<<CONTROL_CYCLE_START_BIT)|(1<<CONTROL_SAFETY_DOOR_BIT))
   #define CONTROL_INVERT_MASK   CONTROL_MASK // May be re-defined to only invert certain control pins.
 
   // Define probe switch input pin.

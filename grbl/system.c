@@ -26,9 +26,9 @@ void system_init()
   // Configure user control pins (for cycle start, reset, feed hold, etc.)
   CONTROL_DDR &= ~(CONTROL_MASK); // Configure as input pins
   #ifdef DISABLE_CONTROL_PIN_PULL_UP
-    CONTROL_PORT &= ~(CONTROL_MASK); // Normal low operation. Requires external pull-down.
+    lpc_gpio_pinmode(&CONTROL_PIN, CONTROL_MASK, LPC_PIN_NONE);   // Normal low operation. Requires external pull-down.
   #else
-    CONTROL_PORT |= CONTROL_MASK;    // Enable internal pull-up resistors. Normal high operation.
+    lpc_gpio_pinmode(&CONTROL_PIN, CONTROL_MASK, LPC_PIN_PULLUP); // Enable internal pull-up resistors. Normal high operation.
   #endif
   CONTROL_PCMSK |= CONTROL_MASK;     // Enable specific pins of the Pin Change Interrupt
   PCICR |= (1 << CONTROL_INT);       // Enable Pin Change Interrupt
@@ -49,7 +49,9 @@ uint8_t system_control_get_state()
     #ifdef ENABLE_SAFETY_DOOR_INPUT_PIN
       if (bit_isfalse(pin,(1<<CONTROL_SAFETY_DOOR_BIT))) { control_state |= CONTROL_PIN_INDEX_SAFETY_DOOR; }
     #endif
-    if (bit_isfalse(pin,(1<<CONTROL_RESET_BIT))) { control_state |= CONTROL_PIN_INDEX_RESET; }
+    #ifndef CONTROL_RESET_NOT_USED
+      if (bit_isfalse(pin,(1<<CONTROL_RESET_BIT))) { control_state |= CONTROL_PIN_INDEX_RESET; }
+    #endif
     if (bit_isfalse(pin,(1<<CONTROL_FEED_HOLD_BIT))) { control_state |= CONTROL_PIN_INDEX_FEED_HOLD; }
     if (bit_isfalse(pin,(1<<CONTROL_CYCLE_START_BIT))) { control_state |= CONTROL_PIN_INDEX_CYCLE_START; }
   }

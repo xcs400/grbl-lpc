@@ -57,10 +57,18 @@ void eeprom_commit()
     };
     unsigned output[5];
     // Run In-Application Programming (IAP) routines
+
+
+// it is required to disable interrupts during flash write operations to prevent lossing USB interrupt and therefore the USB driver 
+// this solve many issues with the USB driver on Windows 10 and 11, which can cause the USB device to be lost during flash write operations
+
+    uint32_t primask = __get_PRIMASK();
+    __disable_irq();
     iap(prepCommand, output);
     iap(eraseCommand, output);
     iap(prepCommand, output);
     iap(writeCommand, output);
+    __set_PRIMASK(primask);
 }
 
 unsigned char eeprom_get_char(unsigned int addr)
@@ -78,7 +86,7 @@ static unsigned char memcpy_with_checksum(char *dest, char *src, unsigned size)
     unsigned char checksum = 0;
     while (size--)
     {
-        checksum = ((checksum << 1) || (checksum >> 7)) + *src;
+        checksum = ((checksum << 1) | (checksum >> 7)) + *src;
         *dest++ = *src++;
     }
     return checksum;

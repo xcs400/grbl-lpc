@@ -32,10 +32,10 @@
 
 
 // Define board type for pin map and default settings.
-#define CPU_MAP_SMOOTHIEBOARD   // Smoothieboard (NXP LPC1769 MCU)
+//#define CPU_MAP_SMOOTHIEBOARD   // Smoothieboard (NXP LPC1769 MCU)
 //#define CPU_MAP_C3D_REMIX       // Cohesion3D Remix (NXP LPC1769 MCU)
 //#define CPU_MAP_C3D_MINI        // Cohesion3D Mini (NXP LPC1769 MCU)
-//#define CPU_MAP_MKS_SBASE       // MKS SBASE Board (NXP LPC1768 MCU)
+#define CPU_MAP_MKS_SBASE       // MKS SBASE Board (NXP LPC1768 MCU)
 //#define CPU_MAP_AZTEEG_X5       // Azteeg X5 Board (NXP LPC1769 MCU)
 
 // Force other Spindle PWM Pin (default is P2.5)
@@ -44,9 +44,11 @@
 
 // Define machine type for machine specific defaults
 //#define DEFAULTS_GENERIC
-#define DEFAULTS_K40
+//#define DEFAULTS_K40
 //#define DEFAULTS_FABKIT
 //#define DEFAULTS_JONAS
+#define DEFAULTS_VARSCHE   // var schneider CNC DIY 
+
 
 // Serial baud rate
 // #define BAUD_RATE 230400
@@ -96,7 +98,7 @@
 // If homing is enabled, homing init lock sets Grbl into an alarm state upon power up. This forces
 // the user to perform the homing cycle (or override the locks) before doing anything else. This is
 // mainly a safety feature to remind the user to home, since position is unknown to Grbl.
-#define HOMING_INIT_LOCK // Comment to disable
+//#define HOMING_INIT_LOCK // Comment to disable
 
 // Define the homing cycle patterns with bitmasks. The homing cycle first performs a search mode
 // to quickly engage the limit switches, followed by a slower locate mode, and finished by a short
@@ -187,7 +189,7 @@
 // immediately forces a feed hold and then safely de-energizes the machine. Resuming is blocked until
 // the safety door is re-engaged. When it is, Grbl will re-energize the machine and then resume on the
 // previous tool path, as if nothing happened.
-#define ENABLE_SAFETY_DOOR_INPUT_PIN // Default disabled. Uncomment to enable.
+//#define ENABLE_SAFETY_DOOR_INPUT_PIN // Default disabled. Uncomment to enable.
 
 // After the safety door switch has been toggled and restored, this setting sets the power-up delay
 // between restoring the spindle and coolant and resuming the cycle.
@@ -223,7 +225,8 @@
 // NOTE: If VARIABLE_SPINDLE is enabled(default), this option has no effect as the PWM output and
 // spindle enable are combined to one pin. If you need both this option and spindle speed PWM,
 // uncomment the config option USE_SPINDLE_DIR_AS_ENABLE_PIN below.
-#define INVERT_SPINDLE_ENABLE_PIN // Default disabled. Uncomment to enable.
+//pafil
+//#define INVERT_SPINDLE_ENABLE_PIN // Default disabled. Uncomment to enable.
 
 // Inverts the selected coolant pin from low-disabled/high-enabled to low-enabled/high-disabled. Useful
 // for some pre-built electronic boards.
@@ -236,13 +239,13 @@
 // Grbl doesn't know its position and to force the user to home before proceeding. This option forces
 // Grbl to always initialize into an ALARM state regardless of homing or not. This option is more for
 // OEMs and LinuxCNC users that would like this power-cycle behavior.
-// #define FORCE_INITIALIZATION_ALARM // Default disabled. Uncomment to enable.
+// #define  // Default disabled. Uncomment to enable.
 
 // At power-up or a reset, Grbl will check the limit switch states to ensure they are not active
 // before initialization. If it detects a problem and the hard limits setting is enabled, Grbl will
 // simply message the user to check the limits and enter an alarm state, rather than idle. Grbl will
 // not throw an alarm message.
-#define CHECK_LIMITS_AT_INIT
+//#define CHECK_LIMITS_AT_INIT
 
 // Open Drain configuration
 // In order to use stepper drivers with optocoupler input, you may need to use

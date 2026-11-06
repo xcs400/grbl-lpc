@@ -1,5 +1,19 @@
 ![GitHub Logo](https://github.com/gnea/gnea-Media/blob/master/Grbl%20Logo/Grbl%20Logo%20250px.png?raw=true)
 
+
+***
+update to fix some issues seen when develloping my CNC
+
+feat: configure Grbl for Pafil's CNC
+
+- Select the MKS SBASE board and add CNC default settings
+- Configure LPC17xx input pull-ups via PINMODE
+- Handle control pins when no RESET input is present
+- Protect flash writes and fix checksum calculation -> solve USB interrupt lost during flash erase 
+- Adjust limit-state reporting and widen the probe mask
+- Update the build version
+
+
 ***
 Old releases are in the `Release` tab. See [cprezzi's branch](https://github.com/cprezzi/grbl-LPC) for more recent releases.
 Note: cprezzi's branch disables current control and has defaults more suitable for other boards.
