@@ -135,9 +135,9 @@
 
 #ifdef DEFAULTS_VARSCHE
   // Description: K40 CNC PAFIF 
-  #define DEFAULT_X_STEPS_PER_MM 1638.634      // pour 26218.1 cps codeur/mm  sur var  26218.1/1638.634 = 15.999973148 
-  #define DEFAULT_Y_STEPS_PER_MM 1638.951      // pour 26222.3 cps codeur/mm  sur var  26222.3/1638.951 = 15.999441106
-  #define DEFAULT_Z_STEPS_PER_MM 1637.9         // pour 26206.5 cps codeur/mm  sur var 26206.5/1637.9=    16.000061054
+  #define DEFAULT_X_STEPS_PER_MM 1638.625     // pour 26218.1 cps codeur/mm  sur var  26218.1/16 
+  #define DEFAULT_Y_STEPS_PER_MM 1638.894      // pour 26222.3 cps codeur/mm  sur var  26222.3/16
+  #define DEFAULT_Z_STEPS_PER_MM 1637.906        // pour 26206.5 cps codeur/mm  sur var 26206.5/16
   #define DEFAULT_A_STEPS_PER_MM 160.0
   #define DEFAULT_X_MAX_RATE 1500.0        // mm/min
   #define DEFAULT_Y_MAX_RATE 1500.0        // mm/min
@@ -170,10 +170,10 @@
   #define DEFAULT_ARC_TOLERANCE 0.002       // mm
   #define DEFAULT_REPORT_INCHES 0           // false
   #define DEFAULT_INVERT_ST_ENABLE 0        // false
-  #define DEFAULT_INVERT_LIMIT_PINS 1       // true for microswitches / false for optical sensors
+  #define DEFAULT_INVERT_LIMIT_PINS 0       // true for microswitches / false for optical sensors
   #define DEFAULT_SOFT_LIMIT_ENABLE 0       // true
   #define DEFAULT_HARD_LIMIT_ENABLE 0       // false
-  #define DEFAULT_INVERT_PROBE_PIN 1        // false
+  #define DEFAULT_INVERT_PROBE_PIN 0        // false
   #define DEFAULT_LASER_MODE 0              // true
   #define DEFAULT_HOMING_ENABLE 0           // true
   #define DEFAULT_HOMING_DIR_MASK 1         // move top/left

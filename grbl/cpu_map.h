@@ -603,7 +603,7 @@ static inline void lpc_gpio_pinmode(DummyReg *, uint32_t, uint32_t) {}
   #define PROBE_DDR       LPC_GPIO1->FIODIR
   #define PROBE_PIN       LPC_GPIO1->FIOPIN
   #define PROBE_PORT      LPC_GPIO1->FIOPIN
-  #define PROBE_BIT       27  // reuse P1.27 from Y-MAX
+  #define PROBE_BIT       28  // reuse P1.28 from Z-MAX
   #define PROBE_MASK      (1<<PROBE_BIT)
 
   // The LPC17xx has 6 PWM channels. Each channel has 2 pins. It can drive both pins simultaneously to the same value.
